@@ -1,42 +1,68 @@
-import * as React from "react"
-import PropTypes from "prop-types"
-import { Link } from "gatsby"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import React, { useContext } from "react"
+import Logo from "../assets/logo.svg"
+import Burger from "../assets/burger.svg"
+import Menu from "./Menu/Menu"
+import { SiteContext } from "../context/SiteContext"
+import MobileMenu from "./Menu/MobileMenu"
+import {
+  header,
+  header__flexWrapper,
+  header__logo,
+  menuBtn,
+} from "../styles/header.module.css"
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
-)
+const Header = () => {
+  const { toggleMenu } = useContext(SiteContext)
 
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
+  const { wpMenu } = useStaticQuery(graphql`
+    {
+      wpMenu(slug: { eq: "main-menu" }) {
+        menuItems {
+          nodes {
+            key: id
+            title: label
+            connectedNode {
+              node {
+                uri
+              }
+            }
+            parentId
+            url
+          }
+        }
+      }
+    }
+  `)
 
-Header.defaultProps = {
-  siteTitle: ``,
+  return (
+    <header className={header}>
+      <div className="container-lg">
+        <div className={header__flexWrapper}>
+          <Link to="/" className="" aria-label="Dilate Logo">
+            <Logo className={header__logo} />
+          </Link>
+          <div>
+            <button
+              onClick={toggleMenu}
+              aria-label="Open Mobile Menu"
+              className={menuBtn}
+            >
+              <Burger className="fill-current text-white" />
+            </button>
+            {wpMenu ? (
+              <Menu menu={wpMenu} />
+            ) : (
+              <div className="text-white">
+                Please configure your "main-menu".
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      {wpMenu && <MobileMenu menu={wpMenu} />}
+    </header>
+  )
 }
 
 export default Header

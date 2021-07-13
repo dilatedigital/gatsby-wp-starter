@@ -8,9 +8,11 @@ require("dotenv").config({
 })
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Dilate Gatsby-WordPress Starter`,
+    description: `A theme starter for Dilate powered by WordPress and GatsbyJS`,
+    author: `Dilate Digital - Jejomar Dorongon`,
+    image: "/dilate-digital-agency-perth.jpeg",
+    siteUrl: `https://google.com/`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -49,6 +51,16 @@ module.exports = {
         verbose: true,
       },
     },
+    {
+      resolve: "gatsby-plugin-react-svg",
+      options: {
+        rule: {
+          include: /assets/,
+        },
+      },
+    },
+    `gatsby-plugin-postcss`,
+    `gatsby-plugin-preact`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
